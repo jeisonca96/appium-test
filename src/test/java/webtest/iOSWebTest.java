@@ -1,0 +1,57 @@
+package webtest;
+
+import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.remote.IOSMobileCapabilityType;
+import io.appium.java_client.remote.MobileCapabilityType;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class iOSWebTest {
+
+    IOSDriver driver = null;
+    DesiredCapabilities dc = new DesiredCapabilities();
+    String testName = "Testing Website on iOS Safari with Java";
+    String accessKey = System.getenv("eyJ4cC51Ijo3OTIyMzE2LCJ4cC5wIjo3OTIyMzE1LCJ4cC5tIjoiTVRVNE1Ea3pPRFF3TlRZd05RIiwiYWxnIjoiSFMyNTYifQ.eyJleHAiOjE4OTYyOTk0OTQsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.YczD5g_HH-M8eZxjFTk_kazSXMhdA-iPTABfR8DjTD0");
+
+    @Before
+    public void setUp() throws MalformedURLException {
+        dc.setCapability("testName", testName);
+        dc.setCapability("accessKey",accessKey);
+        dc.setCapability(MobileCapabilityType.BROWSER_NAME, "safari");
+        dc.setCapability("autoDismissAlerts", true);
+        driver = new IOSDriver(new URL("https://cloud.seetest.io:443/wd/hub"),dc);
+    }
+
+    @Test
+    public void testYourSiteiOS() throws InterruptedException {
+
+        driver.get("https://amazon.com");
+        System.out.println(driver.getTitle());
+        if( driver.getCapabilities().getCapability("device.category").equals("TABLET")){
+
+            driver.findElement(By.xpath("//*[@name='field-keywords']")).sendKeys("iPhone");
+            driver.findElement(By.xpath("//*[@text='Go']")).click();
+        }
+        else{
+            driver.findElement(By.xpath("//*[@name='k']")).sendKeys("iPhone");
+            driver.findElement(By.xpath("//*[@value='Go']")).click();
+        }
+    }
+
+    @After
+    public void tearDown() {
+        if (driver != null)
+        {
+            driver.quit();
+            System.out.println("Report URL : " + driver.getCapabilities().getCapability("reportUrl"));
+
+        }
+    }
+
+}
